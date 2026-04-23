@@ -304,7 +304,9 @@ def create_app(config_name: str = None) -> Flask:
     @app.route('/')
     def root():
         """Serve frontend or API info"""
-        _dist = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
+        _dist = os.path.join(os.path.dirname(__file__), 'frontend', 'dist')
+        if not os.path.isdir(_dist):
+            _dist = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
         if os.path.isdir(_dist):
             from flask import send_from_directory
             return send_from_directory(_dist, 'index.html')
@@ -413,7 +415,9 @@ def register_error_handlers(app: Flask):
                 'message': 'Resource not found'
             }), 404
         # Otherwise serve frontend index.html (SPA client-side routing)
-        _dist = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
+        _dist = os.path.join(os.path.dirname(__file__), 'frontend', 'dist')
+        if not os.path.isdir(_dist):
+            _dist = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
         if os.path.isdir(_dist):
             from flask import send_from_directory
             return send_from_directory(_dist, 'index.html')
@@ -455,7 +459,9 @@ def start_background_worker():
 app = create_app()
 
 # ---------- Serve frontend static build (local dev only) ----------
-_frontend_dist = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
+_frontend_dist = os.path.join(os.path.dirname(__file__), 'frontend', 'dist')
+if not os.path.isdir(_frontend_dist):
+    _frontend_dist = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
 if os.path.isdir(_frontend_dist):
     from flask import send_from_directory
 
