@@ -610,6 +610,8 @@ def list_templates_for_plugin():
         if 'Prompt: ' in desc:
             prompt_used = desc.split('Prompt: ', 1)[1]
 
+        allow_reprocessing = bool(t.get('allow_reprocessing', True))
+
         result.append({
             'id': t['id'],
             'name': t['name'],
@@ -617,6 +619,11 @@ def list_templates_for_plugin():
             'field_count': t.get('field_count', 0),
             'has_analyzer': bool(t.get('analyzer')),
             'prompt_used': prompt_used,
+            # Duplicate handling policy for plugin UI:
+            # allow_reprocessing=False => duplicates should be blocked for this template.
+            'allow_reprocessing': allow_reprocessing,
+            'block_duplicates': not allow_reprocessing,
+            'prevent_reprocessing': not allow_reprocessing,
         })
 
     return jsonify({'templates': result})
